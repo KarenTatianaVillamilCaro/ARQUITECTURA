@@ -1,4 +1,5 @@
-//registradora digital bus intermunicipal
+//REGISTRADORA BUS INTERMUNICIPAL
+
 const int Trigger = 12;   //Pin digital 2 para el Trigger del sensor
 const int Echo =9;//Pin digital 3 para el Echo del sensor
 const  int  LED=4;
@@ -46,7 +47,10 @@ Serial.print("\n valor a cobrar :\n ");
 Serial.print(pago);  
 }
 }
-//sensor intrusos->sonar y encender luz
+
+
+//SENSOR INTRUSOS, SONAR Y ENCENDER LUZ
+
 const int pinBuzzer = 2 ;
 const int Trigger = 12;   //Pin digital 2 para el Trigger del sensor
 const int Echo =9;//Pin digital 3 para el Echo del 
@@ -92,12 +96,13 @@ void loop()
     Serial.println();
      noTone(pinBuzzer);
      digitalWrite(LED, LOW); 
- 
-  }
-  
+  }  
 }
-//control encendido de luz de un salon clase encender cuando detecte persona
-onst int Trigger = 12;   //Pin digital 2 para el Trigger del sensor
+
+
+//CONTROL ENCENDIDO LUZ SALON DE CLASES, ENCENDER CUANDO DETECTE PERSONAS
+
+const int Trigger = 12;   //Pin digital 2 para el Trigger del sensor
 const int Echo =9;//Pin digital 3 para el Echo del 
 const  int  LED=5; 
 void setup() {
@@ -136,10 +141,11 @@ void loop() {
      digitalWrite(LED, LOW); 
      delay(100);
   }
-  
-
 }
-//programa sonar parqueadero
+
+
+
+//PROGRAMA SONAR PARQUEADERO
 const int Trigger = 12;   //Pin digital 2 para el Trigger del sensor
 const int Echo =9;//Pin digital 3 para el Echo del sensor
 const  int  LED=4;
@@ -201,7 +207,164 @@ void loop() {
       digitalWrite(LED3, HIGH);   
       delay(2000);
         digitalWrite(LED3, LOW);
-     }
-    
+     }  
   }
-}  
+} 
+
+
+//PROGRAMA CONTADOR DE PERSONAS EN UN CENTRO COMERCIAL
+
+
+int LED = 13;
+int TRIGGER= 11;
+int ECHO= 10;
+int DURACION;
+int DISTANCIA;
+int IZQ = 0; 
+int CONTADOR = 0;
+int IZQ_ANTE = 0;
+int AHORA = 0;
+
+
+
+void setup() {
+  pinMode(LED, OUTPUT);
+  pinMode(TRIGGER, OUTPUT);
+  pinMode(ECHO, INPUT);
+  Serial.begin(9600);
+}
+
+void loop(){
+delay(10);
+    
+    digitalWrite (TRIGGER, HIGH);
+    delayMicroseconds (10);
+    digitalWrite (TRIGGER, LOW);
+    DURACION = pulseIn (ECHO, HIGH);
+    DISTANCIA = (DURACION/2) / 29.1;
+
+  if (DISTANCIA < 30) { 
+      IZQ = HIGH;
+      digitalWrite (LED, HIGH);
+    }
+ else {
+      IZQ = LOW;
+      digitalWrite (LED, LOW);
+    }  
+ 
+
+if (IZQ ==  HIGH) { 
+AHORA = 1;
+}
+else {
+AHORA = 0;
+}
+
+
+if(AHORA != IZQ_ANTE){
+if(AHORA == 1){
+CONTADOR = CONTADOR + 1;
+Serial.print("CONTADOR: "); 
+Serial.println(CONTADOR);
+}
+}
+IZQ_ANTE = AHORA;
+}
+
+
+//PROGRAMA ORIGINAL  TATIANA (SEMAFORO)
+
+
+int TRIG = 5;
+int ECO = 6;
+int BUZZER = 7; //ZUMBADOR
+int LED1 = 8; //LED ROJO
+int LED2 = 13; //LED AMARILLO
+int LED3 = 12; //LED VERDE
+int DURACION;
+int DISTANCIA;
+
+ 
+ void setup (){
+  pinMode (ECO, INPUT);
+  pinMode (TRIG, OUTPUT);
+  pinMode (LED1, OUTPUT);
+  pinMode (LED2, OUTPUT);
+  pinMode (LED3, OUTPUT);
+   pinMode (BUZZER, OUTPUT);
+  Serial.begin (9600); 
+
+  
+}
+
+
+
+void loop(){
+ digitalWrite (TRIG, HIGH);
+ delay (15);
+ digitalWrite (TRIG, LOW);
+ DURACION = pulseIn (ECO, HIGH);
+ DISTANCIA = DURACION / 58.2;
+ Serial.println (DISTANCIA);
+ delay (1000);
+ 
+ if (DISTANCIA <= 30 && DISTANCIA >= 0){    //ROJO
+  digitalWrite(LED1, HIGH);
+  digitalWrite(BUZZER, HIGH);
+  tone(BUZZER, 800);      
+  delay(100);               
+  noTone(BUZZER); 
+  delay(1); 
+  tone(BUZZER, 700);      
+  delay(100);               
+  noTone(BUZZER);
+  delay(1);
+  tone(BUZZER, 800);      
+  delay(100);               
+  noTone(BUZZER); 
+  delay(1);            
+  delay (DISTANCIA * 5);
+  digitalWrite (LED1, LOW);
+  digitalWrite (BUZZER, LOW);
+ }
+ //else {
+  if (DISTANCIA <= 20 && DISTANCIA >= 0){      //AMARILLO
+  digitalWrite(LED2, HIGH);
+  digitalWrite(BUZZER, HIGH);
+  tone(BUZZER, 500);      
+  delay(100); 
+  noTone(BUZZER); 
+  delay(1);
+  tone(BUZZER, 400);      
+  delay(100);               
+  noTone(BUZZER); 
+  delay(1); 
+  tone(BUZZER, 500);      
+  delay(100); 
+  noTone(BUZZER); 
+  delay(1);
+  delay (DISTANCIA * 5);
+  digitalWrite (LED2, LOW);
+  digitalWrite (BUZZER, LOW);
+ }
+ //else{
+if  (DISTANCIA <= 10 && DISTANCIA >= 0){     //VERDE
+  digitalWrite(LED3, HIGH);
+  digitalWrite(BUZZER, HIGH);
+  tone(BUZZER, 200);      
+  delay(100);               
+  noTone(BUZZER); 
+  delay(1);
+  tone(BUZZER, 100);      
+  delay(1);               
+  noTone(BUZZER);
+  delay(100); 
+   tone(BUZZER, 200);      
+  delay(100);               
+  noTone(BUZZER); 
+  delay(1); 
+  delay (DISTANCIA * 5);
+  digitalWrite (LED3, LOW);
+   digitalWrite (BUZZER, LOW);
+   }
+ }
